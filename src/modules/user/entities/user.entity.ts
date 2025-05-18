@@ -11,19 +11,22 @@ export class User {
     @PrimaryGeneratedColumn()
     id: string;
 
-    @Column({ name: 'first_name', type: 'varchar', length: 100 })
+    @Column({ name: 'first_name', type: 'varchar', length: 100, nullable: true })
     firstName: string;
 
-    @Column({ name: 'last_name', type: 'varchar', length: 100 })
+    @Column({ name: 'last_name', type: 'varchar', length: 100, nullable: true })
     lastName: string;
 
     @Column({ name: 'phone', type: 'varchar', length: 11, unique: true })
     phone: string;
 
-    @Column({ name: 'email', type: 'varchar', length: 100, unique: true })
+    @Column({ name: 'is_phone_verified', default: false })
+    isPhoneVerified: boolean;
+
+    @Column({ name: 'email', type: 'varchar', length: 100, nullable: true, unique: true })
     email: string;
 
-    @Column({ name: 'password', type: 'varchar', length: 100 })
+    @Column({ name: 'password', type: 'varchar', length: 100, nullable: true })
     password: string;
 
     @Column({ name: 'role', type: 'enum', enum: UserRole, default: UserRole.USER })
