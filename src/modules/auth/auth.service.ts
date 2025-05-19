@@ -14,19 +14,19 @@ export class AuthService {
         private jwtUtil: JwtUtil
     ) { }
 
-    private otpService = new Map<string, string>(); // ذخیره موقت
+    private otpService = new Map<string, string>();
 
     requestOtp(dto: RequestDto) {
-        const code = Math.floor(100000 + Math.random() * 900000).toString(); // تولید کد 6 رقمی
-        this.otpService.set(dto.phone, code); // ذخیره کد در مپ
-        console.log(`کد تایید برای شماره ${dto.phone} : ${code}`); // نمایش کد در کنسول
-        return { message: 'کد تایید ارسال شد' };
+        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        this.otpService.set(dto.phone, code);
+        console.log(`code for ${dto.phone} number : ${code}`);
+        return { message: 'send code successfully' };
     }
 
     async verifyOtp(dto: VerifyOtpDto) {
         const code = this.otpService.get(dto.phone); // دریافت کد از مپ
         if (code != dto.code) {
-            throw new UnauthorizedException('کد تایید نادرست است');
+            throw new UnauthorizedException('code is not valid');
         }
         let user = await this.userRepo.findOne({ where: { phone: dto.phone } });
         if (!user) {
@@ -34,8 +34,8 @@ export class AuthService {
         } else {
             user.isPhoneVerified = true;
         }
-        await this.userRepo.save(user); // ذخیره کاربر در دیتابیس
-        this.otpService.delete(dto.phone); // حذف کد از مپ
+        await this.userRepo.save(user);
+        this.otpService.delete(dto.phone);
 
         //generate jwt
         const payload = { sub: user.id, phone: user.phone, role: user.role };
