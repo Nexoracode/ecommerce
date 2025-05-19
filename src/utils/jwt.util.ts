@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
+import { Response } from "express";
 
 export enum JwtTypeToken {
     ACCESS = 'access_token',
@@ -35,5 +36,21 @@ export class JwtUtil {
         } catch (error) {
             return null;
         }
+    }
+
+
+    setTokenInCookie(res: Response, token: string, type: JwtTypeToken) {
+        res.cookie(type, token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: type === JwtTypeToken.ACCESS ?
+                15 * 60 * 1000 : // 15 minutes
+                7 * 24 * 60 * 60 * 1000, // 7 days
+        });
+    }
+
+    removeTokenFromCookie(res: Response, type: JwtTypeToken) {
+        res.clearCookie(type);
     }
 }

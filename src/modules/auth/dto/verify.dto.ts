@@ -1,8 +1,10 @@
-import { IsNotEmpty, IsPhoneNumber } from "class-validator";
+import { IsNotEmpty, IsPhoneNumber, Validate } from "class-validator";
+import { IsEmailOrMobileConstraint } from "./validator";
 
 export class VerifyOtpDto {
-    @IsPhoneNumber('IR')
-    phone: string;
+    @IsNotEmpty()
+    @Validate(IsEmailOrMobileConstraint)
+    identifier: string;
 
     @IsNotEmpty()
     code: string;

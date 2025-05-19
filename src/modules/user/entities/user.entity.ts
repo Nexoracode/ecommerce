@@ -17,7 +17,7 @@ export class User {
     @Column({ name: 'last_name', type: 'varchar', length: 100, nullable: true })
     lastName: string;
 
-    @Column({ name: 'phone', type: 'varchar', length: 11, unique: true })
+    @Column({ name: 'phone', type: 'varchar', length: 11, unique: true, nullable: true })
     phone: string;
 
     @Column({ name: 'is_phone_verified', default: false })
