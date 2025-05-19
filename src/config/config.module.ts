@@ -3,6 +3,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOption } from 'db/data-source';
 import { JwtModule } from '@nestjs/jwt';
+import { AccessStrategy } from 'src/guard/access.strategy';
+import { RefreshStrategy } from 'src/guard/refresh.strategy';
 
 @Module({
     imports: [
@@ -20,7 +22,7 @@ import { JwtModule } from '@nestjs/jwt';
             }),
         })
     ],
-    providers: [ConfigService],
+    providers: [ConfigService, AccessStrategy, RefreshStrategy],
     exports: [ConfigService]
 })
 export class AppConfigModule { }
