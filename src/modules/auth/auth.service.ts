@@ -53,7 +53,7 @@ export class AuthService {
         this.otpService.delete('code');
         this.otpService.delete('identifier');
         //generate jwt
-        const payload = { sub: user.id, phone: user.phone, role: user.role };
+        const payload = { sub: user.id, phone: user.phone, email: user.email, role: user.role };
         const token = this.jwtUtil.generateToken(payload, TypeToken.ACCESS);
         const refreshToken = this.jwtUtil.generateToken(payload, TypeToken.REFRESH);
         //save refresh token in db
