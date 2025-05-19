@@ -4,7 +4,8 @@ import { User } from '../user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { RequestDto } from './dto/request.dto';
 import { VerifyOtpDto } from './dto/verify.dto';
-import { JwtTypeToken, JwtUtil } from 'src/utils/jwt.util';
+import { JwtTypeToken as TypeToken, JwtUtil } from 'src/utils/jwt.util';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -28,18 +29,30 @@ export class AuthService {
         if (code != dto.code) {
             throw new UnauthorizedException('code is not valid');
         }
-        let user = await this.userRepo.findOne({ where: { phone: dto.phone } });
+        let user = await this.userRepo.findOne({ where: { phone: dto.phone }, select: ['id', 'phone', 'apiToken', 'role'] });
         if (!user) {
             user = this.userRepo.create({ phone: dto.phone });
         } else {
             user.isPhoneVerified = true;
         }
-        await this.userRepo.save(user);
         this.otpService.delete(dto.phone);
 
         //generate jwt
         const payload = { sub: user.id, phone: user.phone, role: user.role };
-        const token = this.jwtUtil.generateToken(payload, JwtTypeToken.ACCESS);
-        return { accessToken: token }
+        const token = this.jwtUtil.generateToken(payload, TypeToken.ACCESS);
+        //hash token
+        const hashToken = await bcrypt.hash(token, 10);
+        user.apiToken = hashToken;
+        //save user
+        await this.userRepo.save(user);
+        const { firstName, lastName, apiToken, isPhoneVerified, role, password, ...userData } = user;
+        return {
+            message: 'successfully',
+            statusCode: '200',
+            data: {
+                user: userData,
+                api_token: hashToken,
+            }
+        }
     }
 }
