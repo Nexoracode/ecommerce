@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -17,6 +17,17 @@ export class AuthService {
     ) { }
 
     private otpService = new Map<string, string>();
+
+    async getUserById(id: number) {
+        const user = await this.userRepo.findOne({
+            where: [{ id: id },],
+            select: ['id', 'phone', 'email', 'role', 'apiToken'],
+        });
+        if (!user) {
+            throw new NotFoundException('user not found');
+        }
+        return user;
+    }
 
     requestOtp(dto: RequestDto) {
         const code = Math.floor(100000 + Math.random() * 900000).toString();
