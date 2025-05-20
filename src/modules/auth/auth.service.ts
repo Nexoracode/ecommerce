@@ -40,6 +40,10 @@ export class AuthService {
         //generate jwt
         const payload = { sub: user.id, phone: user.phone, role: user.role };
         const token = this.jwtUtil.generateToken(payload, JwtTypeToken.ACCESS);
-        return { accessToken: token }
+        const userWithoutPassword = { ...user };
+        return {
+            access_token: token,
+            user: userWithoutPassword,
+        }
     }
 }
