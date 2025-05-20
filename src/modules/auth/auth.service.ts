@@ -1,10 +1,12 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { RequestDto } from './dto/request.dto';
 import { VerifyOtpDto } from './dto/verify.dto';
-import { JwtTypeToken, JwtUtil } from 'src/utils/jwt.util';
+import { JwtTypeToken as TypeToken, JwtUtil } from 'src/utils/jwt.util';
+import { Response } from 'express';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -14,36 +16,70 @@ export class AuthService {
         private jwtUtil: JwtUtil
     ) { }
 
-    private otpService = new Map<string, string>(); // ذخیره موقت
+    private otpService = new Map<string, string>();
 
-    requestOtp(dto: RequestDto) {
-        const code = Math.floor(100000 + Math.random() * 900000).toString(); // تولید کد 6 رقمی
-        this.otpService.set(dto.phone, code); // ذخیره کد در مپ
-        console.log(`کد تایید برای شماره ${dto.phone} : ${code}`); // نمایش کد در کنسول
-        return { message: 'کد تایید ارسال شد' };
+    async getUserById(id: number) {
+        const user = await this.userRepo.findOne({
+            where: [{ id: id },],
+            select: ['id', 'phone', 'email', 'role', 'apiToken'],
+        });
+        if (!user) {
+            throw new NotFoundException('user not found');
+        }
+        return user;
     }
 
-    async verifyOtp(dto: VerifyOtpDto) {
-        const code = this.otpService.get(dto.phone); // دریافت کد از مپ
-        if (code != dto.code) {
-            throw new UnauthorizedException('کد تایید نادرست است');
+    requestOtp(dto: RequestDto) {
+        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        this.otpService.set('code', code);
+        this.otpService.set('identifier', dto.identifier);
+        console.log(`send code for ${dto.identifier} : ${code}`)
+        return { message: 'send code successfully' };
+    }
+
+    async verifyOtp(dto: VerifyOtpDto, res: Response) {
+        const realCode = this.otpService.get('code');
+        const identifier = this.otpService.get('identifier');
+        let user = await this.userRepo.findOne({
+            where: [
+                { phone: dto.identifier },
+                { email: dto.identifier }
+            ],
+            select: ['id', 'phone', 'email', 'role', 'apiToken'],
+        });
+        if (realCode != dto.code) {
+            throw new UnauthorizedException('code is valid')
         }
-        let user = await this.userRepo.findOne({ where: { phone: dto.phone } });
+        if (identifier != dto.identifier) {
+            throw new UnauthorizedException('identifier is valid')
+        }
         if (!user) {
-            user = this.userRepo.create({ phone: dto.phone });
-        } else {
+            if (dto.identifier.includes('@')) {
+                user = this.userRepo.create({ email: dto.identifier });
+            } else {
+                user = this.userRepo.create({ phone: dto.identifier });
+            }
             user.isPhoneVerified = true;
         }
-        await this.userRepo.save(user); // ذخیره کاربر در دیتابیس
-        this.otpService.delete(dto.phone); // حذف کد از مپ
-
+        this.otpService.delete('code');
+        this.otpService.delete('identifier');
         //generate jwt
-        const payload = { sub: user.id, phone: user.phone, role: user.role };
-        const token = this.jwtUtil.generateToken(payload, JwtTypeToken.ACCESS);
-        const userWithoutPassword = { ...user };
-        return {
-            access_token: token,
-            user: userWithoutPassword,
-        }
+        const payload = { sub: user.id, phone: user.phone, email: user.email, role: user.role };
+        const token = this.jwtUtil.generateToken(payload, TypeToken.ACCESS);
+        const refreshToken = this.jwtUtil.generateToken(payload, TypeToken.REFRESH);
+        //save refresh token in db
+        const hashRefreshToken = await bcrypt.hash(refreshToken, 10);
+        // update the user with the new refresh token
+        user.apiToken = hashRefreshToken;
+        //save user
+        await this.userRepo.save(user);
+        //set token in cookie
+        this.jwtUtil.setTokenInCookie(res, token, TypeToken.ACCESS);
+        this.jwtUtil.setTokenInCookie(res, refreshToken, TypeToken.REFRESH);
+        const { firstName, lastName, apiToken, isPhoneVerified, role, password, ...userData } = user;
+        return res.json({
+            message: 'login successfully',
+            user: userData
+        })
     }
 }

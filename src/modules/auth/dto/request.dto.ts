@@ -1,6 +1,8 @@
-import { IsPhoneNumber } from "class-validator";
+import { IsNotEmpty, IsPhoneNumber, Validate } from "class-validator";
+import { IsEmailOrMobileConstraint } from "./validator";
 
 export class RequestDto {
-    @IsPhoneNumber('IR')
-    phone: string;
+    @IsNotEmpty()
+    @Validate(IsEmailOrMobileConstraint)
+    identifier: string;
 }

@@ -4,7 +4,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "t
 @Entity()
 export class Address {
     @PrimaryGeneratedColumn()
-    id: string;
+    id: number;
 
     @Column()
     city: string;

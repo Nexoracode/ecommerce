@@ -1,8 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RequestDto } from './dto/request.dto';
 import { VerifyOtpDto } from './dto/verify.dto';
-
+import { Response } from 'express';
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -14,7 +14,7 @@ export class AuthController {
     }
 
     @Post('verify-otp')
-    verifyDto(@Body() dto: VerifyOtpDto) {
-        return this.authService.verifyOtp(dto);
+    verifyDto(@Body() dto: VerifyOtpDto, @Res() res: Response) {
+        return this.authService.verifyOtp(dto, res);
     }
 }

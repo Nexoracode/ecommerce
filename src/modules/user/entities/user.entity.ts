@@ -9,7 +9,7 @@ enum UserRole {
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
-    id: string;
+    id: number;
 
     @Column({ name: 'first_name', type: 'varchar', length: 100, nullable: true })
     firstName: string;
@@ -17,7 +17,7 @@ export class User {
     @Column({ name: 'last_name', type: 'varchar', length: 100, nullable: true })
     lastName: string;
 
-    @Column({ name: 'phone', type: 'varchar', length: 11, unique: true })
+    @Column({ name: 'phone', type: 'varchar', length: 11, unique: true, nullable: true })
     phone: string;
 
     @Column({ name: 'is_phone_verified', default: false })
@@ -26,11 +26,14 @@ export class User {
     @Column({ name: 'email', type: 'varchar', length: 100, nullable: true, unique: true })
     email: string;
 
-    @Column({ name: 'password', type: 'varchar', length: 100, nullable: true })
+    @Column({ name: 'password', type: 'varchar', length: 100, nullable: true, select: false })
     password: string;
 
-    @Column({ name: 'role', type: 'enum', enum: UserRole, default: UserRole.USER })
+    @Column({ name: 'role', type: 'enum', enum: UserRole, default: UserRole.USER, select: false })
     role: UserRole;
+
+    @Column({ name: 'api_token', type: 'varchar', nullable: true, select: false })
+    apiToken: string;
 
     @OneToMany(() => Address, (address) => address.user, { cascade: true })
     addresses: Address[];
