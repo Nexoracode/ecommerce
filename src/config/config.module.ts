@@ -3,12 +3,19 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOption } from 'db/data-source';
 import { JwtModule } from '@nestjs/jwt';
-import { AccessStrategy } from 'src/guard/access.strategy';
-import { RefreshStrategy } from 'src/guard/refresh.strategy';
+import { AccessStrategy } from 'src/common/guard/access.strategy';
+import { RefreshStrategy } from 'src/common/guard/refresh.strategy';
+import { AuthModule } from 'src/modules/auth/auth.module';
+import { APP_GUARD, Reflector } from '@nestjs/core';
+import { JwtUtil } from 'src/common/utils/jwt.util';
+import { AuthService } from 'src/modules/auth/auth.service';
+import { AutoRefreshGuard } from 'src/common/guard/auto-refresh';
+import { UserModule } from 'src/modules/user/user.module';
 
 @Module({
     imports: [
         TypeOrmModule.forRoot(dataSourceOption),
+        AuthModule,
         ConfigModule.forRoot({
             isGlobal: true,
             envFilePath: `.env.${process.env.NODE_ENV || "development"}`
@@ -22,7 +29,17 @@ import { RefreshStrategy } from 'src/guard/refresh.strategy';
             }),
         })
     ],
-    providers: [ConfigService, AccessStrategy, RefreshStrategy],
+    providers: [
+        {
+            provide: APP_GUARD,
+            useFactory: (configService: JwtUtil, authService: AuthService, reflector: Reflector) => new AutoRefreshGuard(configService, authService, reflector),
+            inject: [JwtUtil, AuthService, Reflector],
+        },
+        JwtUtil,
+        ConfigService,
+        AccessStrategy,
+        RefreshStrategy,
+    ],
     exports: [ConfigService]
 })
 export class AppConfigModule { }

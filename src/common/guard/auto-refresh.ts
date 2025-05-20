@@ -3,8 +3,9 @@ import { Reflector } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
 import { AuthService } from "src/modules/auth/auth.service";
 import { Request, Response } from "express";
-import { JwtTypeToken, JwtUtil } from "src/utils/jwt.util";
+import { JwtTypeToken, JwtUtil } from "src/common/utils/jwt.util";
 import * as bcrypt from 'bcrypt';
+import { IS_PUBLIC_KEY } from "../decorator/public.decorator";
 
 @Injectable()
 export class AutoRefreshGuard implements CanActivate {
@@ -19,13 +20,12 @@ export class AutoRefreshGuard implements CanActivate {
         const res = context.switchToHttp().getResponse<Response>();
 
         //check if the route is public
-        const isPublic = this.reflector.get<boolean>('isPublic', context.getHandler());
+        const isPublic = this.reflector.get<boolean>(IS_PUBLIC_KEY, context.getHandler());
         if (isPublic) return true;
 
-        const accessToken = req.cookies['access_token'];
-        const refreshToken = req.cookies['refresh_token'];
+        const accessToken = req.cookies[JwtTypeToken.ACCESS];
+        const refreshToken = req.cookies[JwtTypeToken.REFRESH];
 
-        if (!accessToken && !refreshToken) return false;
         try {
             this.tokenService.verifyToken(accessToken, JwtTypeToken.ACCESS);
             return true;
@@ -48,8 +48,8 @@ export class AutoRefreshGuard implements CanActivate {
                 this.tokenService.setTokenInCookie(res, newAccessToken, JwtTypeToken.ACCESS);
 
                 //update request object for future access
-                req.cookies['access_token'] = newAccessToken;
-                res.locals['newAccessToken'] = newAccessToken;
+                console.log('generate new access token');
+                req.cookies[JwtTypeToken.ACCESS] = newAccessToken;
                 return true;
 
             } catch (error) {

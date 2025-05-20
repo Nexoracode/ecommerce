@@ -4,7 +4,7 @@ import { User } from '../user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { RequestDto } from './dto/request.dto';
 import { VerifyOtpDto } from './dto/verify.dto';
-import { JwtTypeToken as TypeToken, JwtUtil } from 'src/utils/jwt.util';
+import { JwtTypeToken as TypeToken, JwtUtil } from 'src/common/utils/jwt.util';
 import { Response } from 'express';
 import * as bcrypt from 'bcrypt';
 

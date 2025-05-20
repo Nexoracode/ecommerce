@@ -22,12 +22,8 @@ export class JwtUtil {
     }
 
     verifyToken(token: string, type: JwtTypeToken) {
-        try {
-            const secret = type === JwtTypeToken.ACCESS ? process.env.JWT_SECRET : process.env.JWT_REFRESH_SECRET;
-            return this.jwtService.verify(token, { secret });
-        } catch (error) {
-            return null;
-        }
+        const secret = type === JwtTypeToken.ACCESS ? process.env.JWT_SECRET : process.env.JWT_REFRESH_SECRET;
+        return this.jwtService.verify(token, { secret });
     }
 
     decodeToken(token: string) {
