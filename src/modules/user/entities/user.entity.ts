@@ -1,10 +1,7 @@
+import { Role } from "src/common/enums/role.enum";
 import { Address } from "src/modules/address/entities/address.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-enum UserRole {
-    ADMIN = 'admin',
-    USER = 'user',
-}
 
 @Entity()
 export class User {
@@ -29,8 +26,8 @@ export class User {
     @Column({ name: 'password', type: 'varchar', length: 100, nullable: true, select: false })
     password: string;
 
-    @Column({ name: 'role', type: 'enum', enum: UserRole, default: UserRole.USER, select: false })
-    role: UserRole;
+    @Column({ name: 'role', type: 'enum', enum: Role, default: Role.USER, select: false })
+    role: Role;
 
     @Column({ name: 'api_token', type: 'varchar', nullable: true, select: false })
     apiToken: string;

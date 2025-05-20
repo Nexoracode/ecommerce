@@ -17,7 +17,7 @@ export class AuthController {
     }
 
     @Post('verify-otp')
-    @UseGuards(AccessGuard)
+    @Public()
     verifyDto(@Body() dto: VerifyOtpDto, @Res() res: Response) {
         return this.authService.verifyOtp(dto, res);
     }
