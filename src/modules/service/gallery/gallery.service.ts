@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { FtpService } from '../service/ftp.service';
+import { FtpService } from '../ftp/ftp.service';
 
 @Injectable()
 export class GalleryService {
