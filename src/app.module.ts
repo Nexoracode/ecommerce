@@ -7,10 +7,14 @@ import { AddressModule } from './modules/address/address.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { GalleryController } from './modules/gallery/gallery.controller';
 import { GalleryService } from './modules/gallery/gallery.service';
+import { FtpController } from './modules/service/ftp.controller';
+import { FtpService } from './modules/service/ftp.service';
+import { ServiceModule } from './modules/service/service.module';
+import { GalleryModule } from './modules/gallery/gallery.module';
 
 @Module({
-  imports: [AppConfigModule, UserModule, AddressModule, AuthModule],
-  controllers: [AppController, GalleryController],
-  providers: [AppService, GalleryService],
+  imports: [AppConfigModule, UserModule, AddressModule, AuthModule, ServiceModule, GalleryModule],
+  controllers: [AppController, GalleryController, FtpController],
+  providers: [AppService, GalleryService, FtpService],
 })
 export class AppModule { }
