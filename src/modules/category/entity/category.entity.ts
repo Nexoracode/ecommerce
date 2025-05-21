@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Tree, TreeChildren, TreeParent, UpdateDateColumn } from "typeorm";
+import { Product } from "src/modules/product/entity/product.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Tree, TreeChildren, TreeParent, UpdateDateColumn } from "typeorm";
 
 @Tree('closure-table')
 @Entity('categories')
@@ -17,6 +18,9 @@ export class Category {
 
     @TreeParent()
     parent: Category | null
+
+    @ManyToOne(() => Product, product => product.category)
+    products: Product[]
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
