@@ -11,6 +11,7 @@ import { GalleryController } from './modules/gallery/gallery.controller';
 import { GalleryService } from './modules/gallery/gallery.service';
 import { FtpService } from './common/ftp/ftp.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CategoryModule } from './modules/category/category.module';
 
 
 @Module({
@@ -21,6 +22,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     AddressModule,
     AuthModule,
     FtpModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
