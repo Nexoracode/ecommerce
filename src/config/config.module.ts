@@ -10,7 +10,7 @@ import { APP_GUARD, Reflector } from '@nestjs/core';
 import { JwtUtil } from 'src/common/utils/jwt.util';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { AutoRefreshGuard } from 'src/common/guard/auto-refresh';
-import { UserModule } from 'src/modules/user/user.module';
+import { GalleryService } from 'src/modules/gallery/gallery.service';
 
 @Module({
     imports: [

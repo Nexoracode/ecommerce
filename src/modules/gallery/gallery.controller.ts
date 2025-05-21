@@ -1,8 +1,5 @@
-import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
-import { FtpService } from '../ftp/ftp.service'
 import { GalleryService } from './gallery.service';
 
 @Controller('gallery')
@@ -12,7 +9,7 @@ export class GalleryController {
     ) { }
     @Post('upload')
     @UseInterceptors(FileInterceptor('image'))
-    async uploadImage(@UploadedFile() file: Express.Multer.File) {
-        return this.galleryService.uploadImage(file);
+    async uploadImage(@Body('title') title: string, @UploadedFile() file: Express.Multer.File) {
+        return this.galleryService.uploadImage(title, file);
     }
 }

@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { FtpService } from './ftp.service';
-import { FtpController } from './ftp.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-    controllers: [FtpController],
     providers: [FtpService],
     exports: [FtpService],
 })
-export class ServiceModule { }
+export class FtpModule { }

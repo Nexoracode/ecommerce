@@ -5,16 +5,24 @@ import { AppConfigModule } from './config/config.module';
 import { UserModule } from './modules/user/user.module';
 import { AddressModule } from './modules/address/address.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { GalleryController } from './modules/service/gallery/gallery.controller';
-import { GalleryService } from './modules/service/gallery/gallery.service';
-import { FtpController } from './modules/service/ftp/ftp.controller';
-import { FtpService } from './modules/service/ftp/ftp.service';
-import { ServiceModule } from './modules/service/ftp/service.module';
-import { GalleryModule } from './modules/service/gallery/gallery.module';
+import { GalleryModule } from './modules/gallery/gallery.module';
+import { FtpModule } from './common/ftp/service.module';
+import { GalleryController } from './modules/gallery/gallery.controller';
+import { GalleryService } from './modules/gallery/gallery.service';
+import { FtpService } from './common/ftp/ftp.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
 
 @Module({
-  imports: [AppConfigModule, UserModule, AddressModule, AuthModule, ServiceModule, GalleryModule],
-  controllers: [AppController, GalleryController, FtpController],
-  providers: [AppService, GalleryService, FtpService],
+  imports: [
+    AppConfigModule,
+    GalleryModule,
+    UserModule,
+    AddressModule,
+    AuthModule,
+    FtpModule,
+  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule { }
