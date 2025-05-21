@@ -17,7 +17,17 @@ export class ProductVariant {
     @Column('decimal')
     price: number;
 
-    @ManyToMany(() => AttributeValue)
-    @JoinTable({ name: 'atr' })
+    @ManyToMany(() => AttributeValue, { eager: true })
+    @JoinTable({
+        name: 'product_variant_attribute',
+        joinColumn: {
+            name: 'variant_id',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'attribute_value_id',
+            referencedColumnName: 'id',
+        }
+    })
     attributeValues: AttributeValue[]
 }

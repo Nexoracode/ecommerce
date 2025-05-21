@@ -6,7 +6,7 @@ export class Attribute {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ unique: true })
     name: string;
 
     @OneToMany(() => AttributeValue, value => value.attribute)

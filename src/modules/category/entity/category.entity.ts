@@ -1,5 +1,5 @@
 import { Product } from "src/modules/product/entity/product.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Tree, TreeChildren, TreeParent, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Tree, TreeChildren, TreeLevelColumn, TreeParent, UpdateDateColumn } from "typeorm";
 
 @Tree('closure-table')
 @Entity('categories')
@@ -17,9 +17,10 @@ export class Category {
     children: Category[]
 
     @TreeParent()
+    @JoinColumn({ name: 'parent_id' })
     parent: Category | null
 
-    @ManyToOne(() => Product, product => product.category)
+    @OneToMany(() => Product, product => product.category)
     products: Product[]
 
     @CreateDateColumn({ name: 'created_at' })

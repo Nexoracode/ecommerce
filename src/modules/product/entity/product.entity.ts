@@ -1,6 +1,5 @@
 import { Category } from "src/modules/category/entity/category.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Attribute } from "./attribute.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { ProductVariant } from "./product-variant.entity";
 
 @Entity()
@@ -14,10 +13,8 @@ export class Product {
     @Column({ type: 'text' })
     description: string;
 
-    @Column({ type: 'decimal' })
-    price: number;
-
     @ManyToOne(() => Category, category => category.products)
+    @JoinColumn({ name: 'category_id' })
     category: Category;
 
     @OneToMany(() => ProductVariant, variant => variant.product, { cascade: true })
