@@ -6,6 +6,11 @@ import { ProductService } from './product.service';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { CreateProductVariantDto } from './dto/create-product-variant.dto';
 import { ProductVariantService } from './product-variant.service';
+import { CreateCategoryAttributeDto } from './dto/create-category-attr.dto';
+import { CategoryAttributeService } from './category-attribute.service';
+import { UpdateCategoryAttributeDto } from './dto/update-category-attr.dto';
+import { CreateAttributeDto } from './dto/create-attribute.dto';
+import { UpdateAttributeDto } from './dto/update-attribute.dto';
 
 @Controller('product')
 export class ProductController {
@@ -14,6 +19,7 @@ export class ProductController {
         private readonly avService: AttributeValueService,
         private readonly productService: ProductService,
         private readonly pvService: ProductVariantService,
+        private readonly catAttrService: CategoryAttributeService
     ) { }
 
     //product method
@@ -42,6 +48,28 @@ export class ProductController {
         return this.productService.updateProduct(updateDto, +id);
     }
 
+
+    // category attribute method
+    @Get('category-attribute')
+    async findAllCatAttr() {
+        return this.catAttrService.findAllCatAttr();
+    }
+
+    @Get('category-attribute/:id')
+    async findCatAttrById(@Param('id') id: number) {
+        return this.catAttrService.findCatAttrById(+id);
+    }
+
+    @Post('category-attribute/add')
+    async createCatAttr(@Body() createDto: CreateCategoryAttributeDto) {
+        return this.catAttrService.createCatAttr(createDto);
+    }
+
+    @Patch('category-attribute/update/:id')
+    async updateCatAttr(@Param('id') id: string, @Body() updateDto: UpdateCategoryAttributeDto) {
+        return this.catAttrService.updateCatAttr(updateDto, +id);
+    }
+
     // Attribute method
     @Get('attribute')
     async findAllAttribute() {
@@ -54,14 +82,15 @@ export class ProductController {
     }
 
     @Post('attribute/add')
-    async createAttribute(@Body('name') name: string) {
-        return this.attributeService.createAttribute(name);
+    async createAttribute(@Body() createDto: CreateAttributeDto) {
+        return this.attributeService.createAttribute(createDto);
     }
 
     @Patch('attribute/update/:id')
-    async updateAttribute(@Body('name') name: string, @Param('id') id: string) {
-        return this.attributeService.updateAttribute(+id, name);
+    async updateAttribute(@Param('id') id: string, updateDto: UpdateAttributeDto) {
+        return this.attributeService.updateAttribute(+id, updateDto);
     }
+
 
     //Attribute Value method
     @Get('attribute-value')
