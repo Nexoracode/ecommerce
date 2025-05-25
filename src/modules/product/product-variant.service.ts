@@ -4,7 +4,8 @@ import { ProductVariant } from "./entity/product-variant.entity";
 import { Repository, In } from "typeorm";
 import { CreateProductVariantDto } from "./dto/create-product-variant.dto";
 import { ProductService } from "./product.service";
-import { AttributeValue } from "./entity/attribute-value.entity";
+import { AttributeValue } from "../attribute-value/entities/attribute-value.entity";
+import { AttributeValueService } from "../attribute-value/attribute-value.service";
 
 @Injectable()
 export class ProductVariantService {
@@ -12,8 +13,7 @@ export class ProductVariantService {
         @InjectRepository(ProductVariant)
         private readonly pvRepo: Repository<ProductVariant>,
         private readonly productService: ProductService,
-        @InjectRepository(AttributeValue)
-        private readonly attrValRepo: Repository<AttributeValue>,
+        private readonly attributeValueService: AttributeValueService,
     ) { }
 
     async findAllProductVariant() {
@@ -21,7 +21,7 @@ export class ProductVariantService {
     }
 
     async createPV(createDto: CreateProductVariantDto) {
-        const attrValues = await this.attrValRepo.findBy({ id: In(createDto.attributeValueIds) });
+        const attrValues = await this.attributeValueService.findBy(createDto.attributeValueIds);
         const product = await this.productService.findProductById(createDto.productId);
         const pv = this.pvRepo.create({
             stock: createDto.stock,

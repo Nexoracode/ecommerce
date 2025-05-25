@@ -1,5 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Attribute } from "./attribute.entity";
+import { Attribute } from "src/modules/attribute/entities/attribute.entity";
+import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class AttributeValue {
@@ -8,6 +8,9 @@ export class AttributeValue {
 
     @Column()
     value: string;
+
+    @Column({ unique: true })
+    slug: string;
 
     @ManyToOne(() => Attribute, attribute => attribute.values, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'attribute_id' })

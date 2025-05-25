@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Product } from "./product.entity";
-import { AttributeValue } from "./attribute-value.entity";
+import { AttributeValue } from "src/modules/attribute-value/entities/attribute-value.entity";
 
 @Entity()
 export class ProductVariant {

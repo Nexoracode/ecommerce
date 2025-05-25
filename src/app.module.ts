@@ -13,6 +13,9 @@ import { FtpService } from './common/ftp/ftp.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoryModule } from './modules/category/category.module';
 import { ProductModule } from './modules/product/product.module';
+import { CategoryAttributeModule } from './modules/category-attribute/category-attribute.module';
+import { AttributeModule } from './modules/attribute/attribute.module';
+import { AttributeValueModule } from './modules/attribute-value/attribute-value.module';
 
 
 @Module({
@@ -25,6 +28,9 @@ import { ProductModule } from './modules/product/product.module';
     FtpModule,
     CategoryModule,
     ProductModule,
+    CategoryAttributeModule,
+    AttributeModule,
+    AttributeValueModule,
   ],
   controllers: [AppController],
   providers: [AppService],

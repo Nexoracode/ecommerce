@@ -1,6 +1,6 @@
+import { AttributeValue } from "src/modules/attribute-value/entities/attribute-value.entity";
+import { CategoryAttribute } from "src/modules/category-attribute/entities/category-attribute.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { AttributeValue } from "./attribute-value.entity";
-import { CategoryAttribute } from "./category-attribute.entity";
 
 @Entity()
 export class Attribute {

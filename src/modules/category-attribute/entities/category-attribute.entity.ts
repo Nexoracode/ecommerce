@@ -1,5 +1,5 @@
+import { Attribute } from "src/modules/attribute/entities/attribute.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Attribute } from "./attribute.entity";
 
 @Entity()
 export class CategoryAttribute {
@@ -14,4 +14,4 @@ export class CategoryAttribute {
 
     @OneToMany(() => Attribute, attribute => attribute.categoryAttr)
     attributes: Attribute[]
-}
+} 
