@@ -13,10 +13,12 @@ export class Attribute {
     @Column()
     slug: string;
 
+    @Column({ name: 'is_public', type: 'boolean', default: false })
+    isPublic: boolean;
+
     @OneToMany(() => AttributeValue, value => value.attribute)
     values: AttributeValue[]
 
-    @ManyToOne(() => CategoryAttribute, catAttr => catAttr.attributes)
-    @JoinColumn({ name: 'category_attr_id' })
-    categoryAttr: CategoryAttribute;
+    @OneToMany(() => CategoryAttribute, catAttr => catAttr.attribute)
+    categoryAttributes: CategoryAttribute[];
 }

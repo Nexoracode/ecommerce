@@ -1,17 +1,17 @@
 import { Attribute } from "src/modules/attribute/entities/attribute.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Category } from "src/modules/category/entity/category.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class CategoryAttribute {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ unique: true })
-    name: string;
+    @ManyToOne(() => Category, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'category_id' })
+    category: Category;
 
-    @Column({ unique: true })
-    slug: string;
-
-    @OneToMany(() => Attribute, attribute => attribute.categoryAttr)
-    attributes: Attribute[]
+    @ManyToOne(() => Attribute, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'attribute_id' })
+    attribute: Attribute;
 } 

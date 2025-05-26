@@ -7,9 +7,10 @@ import { CategoryAttributeModule } from '../category-attribute/category-attribut
 import { AttributeValueModule } from '../attribute-value/attribute-value.module';
 import { CategoryAttributeService } from '../category-attribute/category-attribute.service';
 import { AttributeValueService } from '../attribute-value/attribute-value.service';
+import { CategoryAttribute } from '../category-attribute/entities/category-attribute.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Attribute]), CategoryAttributeModule],
+  imports: [TypeOrmModule.forFeature([Attribute, CategoryAttribute]), CategoryAttributeModule],
   controllers: [AttributeController],
   providers: [AttributeService],
   exports: [AttributeService]

@@ -1,3 +1,4 @@
+import { CategoryAttribute } from "src/modules/category-attribute/entities/category-attribute.entity";
 import { Product } from "src/modules/product/entity/product.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Tree, TreeChildren, TreeLevelColumn, TreeParent, UpdateDateColumn } from "typeorm";
 
@@ -22,6 +23,9 @@ export class Category {
 
     @OneToMany(() => Product, product => product.category)
     products: Product[]
+
+    @OneToMany(() => CategoryAttribute, ca => ca.category)
+    categoryAttributes: CategoryAttribute[];
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;

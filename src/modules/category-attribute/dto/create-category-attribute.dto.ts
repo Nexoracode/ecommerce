@@ -1,9 +1,13 @@
-import { IsNotEmpty, IsNumber } from "class-validator";
+import { Transform } from "class-transformer";
+import { IsBoolean, IsNotEmpty, IsNumber } from "class-validator";
 
 export class CreateCategoryAttributeDto {
-    @IsNotEmpty()
-    name: string;
 
     @IsNotEmpty()
-    slug: string;
+    @IsNumber()
+    categoryId: number;
+
+    @IsNotEmpty()
+    @IsNumber()
+    attributeId: number;
 }

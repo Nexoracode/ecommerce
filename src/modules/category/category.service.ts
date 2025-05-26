@@ -18,9 +18,9 @@ export class CategoryService {
     async findByIdWithDescendants(id: number) {
         const node = await this.treeRepo.findOne({ where: { id } })
         if (!node) {
-            throw new NotFoundException('category not found');
+            throw new NotFoundException(`Item with ID ${id} not found`);
         }
-        return this.treeRepo.findDescendantsTree(node);
+        return await this.treeRepo.findDescendantsTree(node);
     }
 
     async create(createDto: CreateDto) {
@@ -31,5 +31,20 @@ export class CategoryService {
             category.parent = await this.treeRepo.findOne({ where: { id: createDto.parentId } });
         }
         return this.treeRepo.save(category);
+    }
+
+    async delete(id: number) {
+        const node = await this.treeRepo.findOne({ where: { id } });
+        if (!node) {
+            throw new NotFoundException(`Item with ID ${id} not found`);
+        }
+        const tree = await this.treeRepo.findDescendants(node);
+
+        const ordered = tree.sort((a, b) => (b.id || 0) - (a.id || 0));
+
+        for (const item of ordered) {
+            await this.treeRepo.delete(item.id);
+        }
+        return 'Category and its descendants deleted successfully';
     }
 }

@@ -5,25 +5,23 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Attribute } from './entities/attribute.entity';
 import { Repository } from 'typeorm';
 import { CategoryAttributeService } from '../category-attribute/category-attribute.service';
+import { CategoryAttribute } from '../category-attribute/entities/category-attribute.entity';
 
 @Injectable()
 export class AttributeService {
   constructor(
     @InjectRepository(Attribute)
     private readonly attributeRepo: Repository<Attribute>,
-    private readonly catAttrService: CategoryAttributeService,
+
+    @InjectRepository(CategoryAttribute)
+    private readonly categoryAttributeRepo: Repository<CategoryAttribute>,
   ) { }
 
   async create(createDto: CreateAttributeDto) {
-    let attribute = await this.attributeRepo.findOne({ where: { name: createDto.name } });
-    if (attribute) throw new BadRequestException('attribute name exists');
-    const catAttr = await this.catAttrService.findOne(createDto.categoryId);
-    attribute = this.attributeRepo.create({
-      name: createDto.name,
-      slug: createDto.slug,
-      categoryAttr: catAttr,
-    })
-    return await this.attributeRepo.save(attribute);
+    const exists = await this.attributeRepo.findOneBy({ slug: createDto.slug });
+    if (exists) throw new BadRequestException('slug exists');
+    const attr = this.attributeRepo.create(createDto);
+    return await this.attributeRepo.save(attr);
   }
 
   async findAll() {
@@ -37,17 +35,23 @@ export class AttributeService {
   }
 
   async update(id: number, updateDto: UpdateAttributeDto) {
-    const attribute = await this.findOne(id);
-    const catAttr = await this.catAttrService.findOne(updateDto.categoryId!);
-    attribute.name = updateDto.name!;
-    attribute.slug = updateDto.slug!;
-    attribute.categoryAttr = catAttr;
-    return await this.attributeRepo.save(attribute);
+    const attr = await this.attributeRepo.preload({ id, ...updateDto });
+    if (!attr) throw new NotFoundException('attr not found');
+    return await this.attributeRepo.save(attr);
+
   }
 
   async remove(id: number) {
-    const attribute = await this.findOne(id);
-    this.attributeRepo.remove(attribute);
-    return await this.attributeRepo.save(attribute);
+    const attr = await this.attributeRepo.findOneBy({ id });
+    if (!attr) throw new NotFoundException('attr not found');
+    return await this.attributeRepo.remove(attr);
+  }
+
+  async findByCategory(categoryId: number) {
+    const relation = await this.categoryAttributeRepo.find({
+      where: { category: { id: categoryId } },
+      relations: ['attribute'],
+    });
+    return relation.map(rel => rel.attribute);
   }
 }
