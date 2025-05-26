@@ -11,8 +11,13 @@ export class ProductController {
         private readonly productService: ProductService,
         private readonly pvService: ProductVariantService,
     ) { }
-
     //product method
+
+    @Post()
+    async createProduct(@Body() createDto: CreateProductDto) {
+        return this.productService.createProduct(createDto);
+    }
+
     @Get()
     async findAllProduct() {
         return this.productService.findAllProduct();
@@ -23,7 +28,7 @@ export class ProductController {
         return this.productService.findProductById(+id);
     }
 
-    @Get('category/:id')
+    @Get('by-category/:id')
     async findProductByCategoryId(@Param('id') id: string) {
         const categoryId = Number(id);
         if (isNaN(categoryId)) {
@@ -32,12 +37,7 @@ export class ProductController {
         return this.productService.findProductByCategoryId(+id);
     }
 
-    @Post('add')
-    async createProduct(@Body() createDto: CreateProductDto) {
-        return this.productService.createProduct(createDto);
-    }
-
-    @Patch('update/:id')
+    @Patch(':id')
     async updateProduct(@Body() updateDto: UpdateProductDto, @Param('id') id: string) {
         return this.productService.updateProduct(updateDto, +id);
     }
@@ -49,7 +49,7 @@ export class ProductController {
         return this.pvService.findAllProductVariant();
     }
 
-    @Post('variant/add')
+    @Post('variant')
     async createPV(@Body() createDto: CreateProductVariantDto) {
         return this.pvService.createPV(createDto);
     }

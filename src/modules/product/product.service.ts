@@ -15,17 +15,17 @@ export class ProductService {
     ) { }
 
     async findAllProduct() {
-        return await this.productRepo.find({ relations: ['category'] });
+        return await this.productRepo.find({ relations: ['category', 'variants'] });
     }
 
     async findProductById(id: number) {
-        const product = await this.productRepo.findOne({ where: { id }, relations: ['category'] })
+        const product = await this.productRepo.findOne({ where: { id }, relations: ['category', 'variants'] })
         if (!product) throw new NotFoundException('product not found');
         return product;
     }
 
     async findProductByCategoryId(categoryId: number) {
-        const product = await this.productRepo.find({ where: { category: { id: categoryId } }, relations: ['category'] });
+        const product = await this.productRepo.find({ where: { category: { id: categoryId } }, relations: ['category', 'variants'] });
         return product;
     }
 

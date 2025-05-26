@@ -48,10 +48,12 @@ export class AttributeService {
   }
 
   async findByCategory(categoryId: number) {
-    const relation = await this.categoryAttributeRepo.find({
+    const categorySpecificAttribute = await this.categoryAttributeRepo.find({
       where: { category: { id: categoryId } },
       relations: ['attribute'],
     });
-    return relation.map(rel => rel.attribute);
+    const globalAttributes = await this.attributeRepo.find({ where: { isPublic: true } });
+    const allAttributes = [...globalAttributes, ...categorySpecificAttribute.map(catAttr => catAttr.attribute)];
+    return allAttributes
   }
 }

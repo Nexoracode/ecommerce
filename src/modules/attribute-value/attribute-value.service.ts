@@ -41,11 +41,8 @@ export class AttributeValueService {
   }
 
   async update(id: number, updateDto: UpdateAttributeValueDto) {
-    const av = await this.findOne(id);
-    const attribute = await this.attributeService.findOne(updateDto.attributeId!);
-    av.value = updateDto.value!;
-    av.slug = updateDto.slug!;
-    av.attribute = attribute;
+    const av = await this.avRepo.preload({ id, ...updateDto });
+    if (!av) throw new NotFoundException('attribute value not found');
     return await this.avRepo.save(av);
   }
 
