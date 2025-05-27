@@ -16,6 +16,7 @@ import { ProductModule } from './modules/product/product.module';
 import { CategoryAttributeModule } from './modules/category-attribute/category-attribute.module';
 import { AttributeModule } from './modules/attribute/attribute.module';
 import { AttributeValueModule } from './modules/attribute-value/attribute-value.module';
+import { AttributeGroupModule } from './modules/attribute-group/attribute-group.module';
 
 
 @Module({
@@ -31,6 +32,7 @@ import { AttributeValueModule } from './modules/attribute-value/attribute-value.
     CategoryAttributeModule,
     AttributeModule,
     AttributeValueModule,
+    AttributeGroupModule,
   ],
   controllers: [AppController],
   providers: [AppService],

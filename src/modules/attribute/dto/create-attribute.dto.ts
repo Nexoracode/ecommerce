@@ -5,8 +5,11 @@ export class CreateAttributeDto {
     @IsNotEmpty()
     name: string;
 
-    @IsNotEmpty()
-    slug: string;
+    @IsOptional()
+    @IsNumber()
+    @Transform(({ value }) => (value ? Number(value) : null))
+    @Transform(({ obj }) => obj.group_id, { toClassOnly: true })
+    groupId: number;
 
     @IsOptional()
     @IsBoolean()

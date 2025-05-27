@@ -11,6 +11,14 @@ export class CategoryService {
         this.treeRepo = this.dataSource.getTreeRepository(Category);
     }
 
+    async findOneBy(id: number) {
+        const category = await this.treeRepo.findOne({ where: { id } });
+        if (!category) {
+            throw new NotFoundException(`Category with ID ${id} not found`);
+        }
+        return category;
+    }
+
     async findAllTree() {
         return this.treeRepo.findTrees();
     }

@@ -5,9 +5,6 @@ export class CreateAttributeValueDto {
     @IsNotEmpty()
     value: string;
 
-    @IsNotEmpty()
-    slug: string;
-
     @IsOptional()
     @IsNumber()
     @Transform(({ value }) => Number(value))

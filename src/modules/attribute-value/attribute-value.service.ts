@@ -17,9 +17,8 @@ export class AttributeValueService {
   async create(createDto: CreateAttributeValueDto) {
     const attribute = await this.attributeService.findOne(createDto.attributeId);
     const attributeValue = this.avRepo.create({
-      value: createDto.value,
-      slug: createDto.slug,
-      attribute: attribute,
+      ...createDto,
+      attribute,
     });
     return this.avRepo.save(attributeValue);
   }
@@ -41,7 +40,7 @@ export class AttributeValueService {
   }
 
   async update(id: number, updateDto: UpdateAttributeValueDto) {
-    const av = await this.avRepo.preload({ id, ...updateDto });
+    const av = await this.avRepo.preload({ id, ...updateDto, attribute: { id: updateDto.attributeId } });
     if (!av) throw new NotFoundException('attribute value not found');
     return await this.avRepo.save(av);
   }

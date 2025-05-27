@@ -9,9 +9,6 @@ export class AttributeValue {
     @Column()
     value: string;
 
-    @Column({ unique: true })
-    slug: string;
-
     @ManyToOne(() => Attribute, attribute => attribute.values, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'attribute_id' })
     attribute: Attribute;
