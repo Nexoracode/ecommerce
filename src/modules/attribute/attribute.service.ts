@@ -4,8 +4,8 @@ import { UpdateAttributeDto } from './dto/update-attribute.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Attribute } from './entities/attribute.entity';
 import { Repository } from 'typeorm';
-import { CategoryAttributeService } from '../category-attribute/category-attribute.service';
 import { CategoryAttribute } from '../category-attribute/entities/category-attribute.entity';
+import { AttributeGroupService } from '../attribute-group/attribute-group.service';
 
 @Injectable()
 export class AttributeService {
@@ -15,30 +15,37 @@ export class AttributeService {
 
     @InjectRepository(CategoryAttribute)
     private readonly categoryAttributeRepo: Repository<CategoryAttribute>,
+    private readonly attributeGroupService: AttributeGroupService,
   ) { }
 
   async create(createDto: CreateAttributeDto) {
-    const exists = await this.attributeRepo.findOneBy({ slug: createDto.slug });
-    if (exists) throw new BadRequestException('slug exists');
-    const attr = this.attributeRepo.create(createDto);
+    const group = await this.attributeGroupService.findOne(createDto.groupId);
+    const attr = this.attributeRepo.create({
+      ...createDto,
+      group,
+      isPublic: createDto.isPublic ?? false,
+    });
     return await this.attributeRepo.save(attr);
   }
 
   async findAll() {
-    return await this.attributeRepo.find();
+    return await this.attributeRepo.find({
+      relations: ['group', 'values'],
+      order: { name: 'ASC' },
+    });
   }
 
   async findOne(id: number) {
-    const attribute = await this.attributeRepo.findOne({ where: { id } });
+    const attribute = await this.attributeRepo.findOne({ where: { id }, relations: ['group'] });
     if (!attribute) throw new NotFoundException('attribute not found');
     return attribute;
   }
 
   async update(id: number, updateDto: UpdateAttributeDto) {
-    const attr = await this.attributeRepo.preload({ id, ...updateDto });
+    const group = await this.attributeGroupService.findOne(updateDto.groupId!);
+    const attr = await this.attributeRepo.preload({ id, ...updateDto, group, isPublic: updateDto.isPublic ?? false });
     if (!attr) throw new NotFoundException('attr not found');
     return await this.attributeRepo.save(attr);
-
   }
 
   async remove(id: number) {
