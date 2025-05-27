@@ -4,7 +4,6 @@ import { ProductVariant } from "./entity/product-variant.entity";
 import { Repository, In } from "typeorm";
 import { CreateProductVariantDto } from "./dto/create-product-variant.dto";
 import { ProductService } from "./product.service";
-import { AttributeValue } from "../attribute-value/entities/attribute-value.entity";
 import { AttributeValueService } from "../attribute-value/attribute-value.service";
 
 @Injectable()
@@ -17,7 +16,7 @@ export class ProductVariantService {
     ) { }
 
     async findAllProductVariant() {
-        return await this.pvRepo.find()
+        return await this.pvRepo.find();
     }
 
     async createPV(createDto: CreateProductVariantDto) {
@@ -27,7 +26,12 @@ export class ProductVariantService {
             stock: createDto.stock,
             price: createDto.price,
             product,
-            attributeValues: attrValues
+            attributes: attrValues.map(attrValue => {
+                return {
+                    attribute: attrValue.attribute,
+                    value: attrValue,
+                };
+            }),
         });
         return await this.pvRepo.save(pv);
     }
