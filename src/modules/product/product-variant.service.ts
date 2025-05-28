@@ -4,34 +4,52 @@ import { ProductVariant } from "./entity/product-variant.entity";
 import { Repository, In } from "typeorm";
 import { CreateProductVariantDto } from "./dto/create-product-variant.dto";
 import { ProductService } from "./product.service";
-import { AttributeValueService } from "../attribute-value/attribute-value.service";
-
+import { VariantAttributeValueService } from "../variant-attribute-value/variant-attribute-value.service";
 @Injectable()
 export class ProductVariantService {
     constructor(
         @InjectRepository(ProductVariant)
         private readonly pvRepo: Repository<ProductVariant>,
-        private readonly productService: ProductService,
-        private readonly attributeValueService: AttributeValueService,
+        private readonly pService: ProductService,
     ) { }
 
-    async findAllProductVariant() {
-        return await this.pvRepo.find();
+    async findVariantByProduct(productId: number) {
+        await this.pService.findProductById(productId);
+        const variants = await this.pvRepo.find({
+            where: { product: { id: productId } },
+            relations: ['attributes', 'attributes.attribute', 'attributes.attribute.group', 'attributes.value']
+        });
+        return variants.map(variant => {
+            const grouped = {};
+            for (const attr of variant.attributes) {
+                const groupName = attr.attribute.group?.name || 'مشخصات کلی';
+                if (!grouped[groupName]) grouped[groupName] = [];
+                grouped[groupName].push({
+                    attribute: attr.attribute.name,
+                    value: attr.value.value,
+                })
+            }
+
+            return {
+                id: variant.id,
+                sku: variant.sku,
+                price: variant.price,
+                stock: variant.stock,
+                groups: Object.entries(grouped).map(([group, items]) => ({
+                    group,
+                    items,
+                }))
+            }
+        });
     }
 
     async createPV(createDto: CreateProductVariantDto) {
-        const attrValues = await this.attributeValueService.findBy(createDto.attributeValueIds);
-        const product = await this.productService.findProductById(createDto.productId);
+        const product = await this.pService.findProductById(createDto.productId);
         const pv = this.pvRepo.create({
             stock: createDto.stock,
             price: createDto.price,
+            sku: createDto.sku,
             product,
-            attributes: attrValues.map(attrValue => {
-                return {
-                    attribute: attrValue.attribute,
-                    value: attrValue,
-                };
-            }),
         });
         return await this.pvRepo.save(pv);
     }

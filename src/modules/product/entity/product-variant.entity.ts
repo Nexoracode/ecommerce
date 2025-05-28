@@ -1,7 +1,6 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Product } from "./product.entity";
 import { VariantAttributeValue } from "src/modules/variant-attribute-value/entities/variant-attribute-value.entity";
-
 @Entity()
 export class ProductVariant {
     @PrimaryGeneratedColumn()
@@ -16,6 +15,9 @@ export class ProductVariant {
 
     @Column('decimal')
     price: number;
+
+    @Column({ nullable: true })
+    sku: string;
 
     @OneToMany(() => VariantAttributeValue, vav => vav.variant, { cascade: true })
     attributes: VariantAttributeValue[]

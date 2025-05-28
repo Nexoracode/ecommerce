@@ -1,26 +1,39 @@
 import { Injectable } from '@nestjs/common';
 import { CreateVariantAttributeValueDto } from './dto/create-variant-attribute-value.dto';
 import { UpdateVariantAttributeValueDto } from './dto/update-variant-attribute-value.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { VariantAttributeValue } from './entities/variant-attribute-value.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class VariantAttributeValueService {
-  create(createVariantAttributeValueDto: CreateVariantAttributeValueDto) {
-    return 'This action adds a new variantAttributeValue';
+  constructor(
+    @InjectRepository(VariantAttributeValue)
+    private readonly vavRepo: Repository<VariantAttributeValue>
+  ) { }
+
+  async create(dto: CreateVariantAttributeValueDto) {
+    const vav = this.vavRepo.create({
+      variant: { id: dto.variantId },
+      value: { id: dto.valueId },
+      attribute: { id: dto.attributeId }
+    });
+    return await this.vavRepo.save(vav);
   }
 
-  findAll() {
-    return `This action returns all variantAttributeValue`;
+  async findAll() {
+    return await this.vavRepo.find();
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return `This action returns a #${id} variantAttributeValue`;
   }
 
-  update(id: number, updateVariantAttributeValueDto: UpdateVariantAttributeValueDto) {
+  async update(id: number, dto: UpdateVariantAttributeValueDto) {
     return `This action updates a #${id} variantAttributeValue`;
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return `This action removes a #${id} variantAttributeValue`;
   }
 }

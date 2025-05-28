@@ -1,4 +1,4 @@
-import { IsArray, IsNumber } from "class-validator";
+import { IsArray, IsNumber, IsOptional } from "class-validator";
 
 export class CreateProductVariantDto {
     @IsNumber()
@@ -10,6 +10,6 @@ export class CreateProductVariantDto {
     @IsNumber()
     productId: number;
 
-    @IsArray()
-    attributeValueIds: number[];
+    @IsOptional()
+    sku: string;
 }

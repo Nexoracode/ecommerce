@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductService } from './product.service';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -44,13 +44,8 @@ export class ProductController {
 
     //product variant method
 
-    @Get('variant')
-    async findAllPV() {
-        return this.pvService.findAllProductVariant();
-    }
-
-    @Post('variant')
-    async createPV(@Body() createDto: CreateProductVariantDto) {
-        return this.pvService.createPV(createDto);
+    @Get('dkp-:id/variant')
+    async findAllPV(@Param('id', ParseIntPipe) id: number) {
+        return this.pvService.findVariantByProduct(id);
     }
 }

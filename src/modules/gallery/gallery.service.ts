@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Gallery } from './entity/gallery.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { FtpService } from 'src/common/ftp/ftp.service';
 
 @Injectable()
@@ -35,5 +35,23 @@ export class GalleryService {
                 url,
             }
         };
+    }
+
+    async findAll() {
+        const gallery = await this.galleryRepo.find();
+        return gallery;
+    }
+
+    async searchByTitle(title: string) {
+        if (!title) {
+            throw new BadRequestException('Title is required for search');
+        }
+        const gallery = await this.galleryRepo.find({
+            where: { title: Like(`%${title}%`) },
+        });
+        if (gallery.length === 0) {
+            throw new BadRequestException('No images found with the given title');
+        }
+        return gallery;
     }
 }
