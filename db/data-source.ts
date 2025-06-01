@@ -2,6 +2,7 @@ import * as dotenv from "dotenv";
 const envFile = `.env.${process.env.NODE_ENV || "development"}`;
 dotenv.config({ path: envFile });
 import { DataSource, DataSourceOptions } from 'typeorm';
+import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 
 export const dataSourceOption: DataSourceOptions = {
     type: 'mysql',
@@ -14,9 +15,11 @@ export const dataSourceOption: DataSourceOptions = {
     migrations: [__dirname + '/migrations/*.js'],
     logging: false,
     synchronize: process.env.NODE_ENV === 'development',
+    namingStrategy: new SnakeNamingStrategy(),
 };
 
 const dataSource = new DataSource(dataSourceOption);
 export default dataSource;
+
 
 console.log(`.env.${process.env.NODE_ENV}`)
