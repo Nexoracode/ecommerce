@@ -1,4 +1,4 @@
-import { Category } from "src/modules/category/entity/category.entity";
+import { Category } from "src/modules/category/entities/category.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { ProductVariant } from "./product-variant.entity";
 

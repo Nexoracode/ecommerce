@@ -1,5 +1,5 @@
 import { Attribute } from "src/modules/attributes/attribute/entities/attribute.entity";
-import { Category } from "src/modules/category/entity/category.entity";
+import { Category } from "src/modules/category/entities/category.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()

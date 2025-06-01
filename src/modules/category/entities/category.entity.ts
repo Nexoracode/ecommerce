@@ -1,5 +1,5 @@
 import { CategoryAttribute } from "src/modules/category-attribute/entities/category-attribute.entity";
-import { Product } from "src/modules/product/entity/product.entity";
+import { Product } from "src/modules/product/entities/product.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Tree, TreeChildren, TreeLevelColumn, TreeParent, UpdateDateColumn } from "typeorm";
 
 @Tree('closure-table')

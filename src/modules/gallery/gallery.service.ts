@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Gallery } from './entity/gallery.entity';
+import { Gallery } from './entites/gallery.entity';
 import { Like, Repository } from 'typeorm';
 import { FtpService } from 'src/common/ftp/ftp.service';
 

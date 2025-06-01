@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { ProductVariant } from "./entity/product-variant.entity";
+import { ProductVariant } from "./entities/product-variant.entity";
 import { Repository, In } from "typeorm";
 import { CreateProductVariantDto } from "./dto/create-product-variant.dto";
 import { ProductService } from "./product.service";
