@@ -4,7 +4,6 @@ import { ProductVariant } from "./entity/product-variant.entity";
 import { Repository, In } from "typeorm";
 import { CreateProductVariantDto } from "./dto/create-product-variant.dto";
 import { ProductService } from "./product.service";
-import { VariantAttributeValueService } from "../variant-attribute-value/variant-attribute-value.service";
 @Injectable()
 export class ProductVariantService {
     constructor(

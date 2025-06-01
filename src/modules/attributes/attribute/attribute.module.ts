@@ -3,13 +3,9 @@ import { AttributeService } from './attribute.service';
 import { AttributeController } from './attribute.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Attribute } from './entities/attribute.entity';
-import { CategoryAttributeModule } from '../category-attribute/category-attribute.module';
-import { AttributeValueModule } from '../attribute-value/attribute-value.module';
-import { CategoryAttributeService } from '../category-attribute/category-attribute.service';
-import { AttributeValueService } from '../attribute-value/attribute-value.service';
-import { CategoryAttribute } from '../category-attribute/entities/category-attribute.entity';
-import { AttributeGroupService } from '../attribute-group/attribute-group.service';
 import { AttributeGroupModule } from '../attribute-group/attribute-group.module';
+import { CategoryAttribute } from 'src/modules/category-attribute/entities/category-attribute.entity';
+import { CategoryAttributeModule } from 'src/modules/category-attribute/category-attribute.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Attribute, CategoryAttribute]), CategoryAttributeModule, AttributeGroupModule],

@@ -1,5 +1,5 @@
-import { Attribute } from "src/modules/attribute/entities/attribute.entity";
 import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Attribute } from "../../attribute/entities/attribute.entity";
 
 @Entity()
 export class AttributeValue {

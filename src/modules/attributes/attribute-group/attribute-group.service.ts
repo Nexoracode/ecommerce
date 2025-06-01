@@ -4,7 +4,7 @@ import { UpdateAttributeGroupDto } from './dto/update-attribute-group.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AttributeGroup } from './entities/attribute-group.entity';
 import { Repository } from 'typeorm';
-import { CategoryService } from '../category/category.service';
+import { CategoryService } from 'src/modules/category/category.service';
 
 @Injectable()
 export class AttributeGroupService {

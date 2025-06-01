@@ -1,6 +1,6 @@
-import { Attribute } from "src/modules/attribute/entities/attribute.entity";
 import { Category } from "src/modules/category/entity/category.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Attribute } from "../../attribute/entities/attribute.entity";
 
 @Entity()
 export class AttributeGroup {

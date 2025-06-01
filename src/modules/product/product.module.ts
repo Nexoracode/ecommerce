@@ -6,8 +6,7 @@ import { Product } from './entity/product.entity';
 import { ProductVariant } from './entity/product-variant.entity';
 import { CategoryModule } from '../category/category.module';
 import { ProductVariantService } from './product-variant.service';
-import { AttributeValueModule } from '../attribute-value/attribute-value.module';
-import { VariantAttributeValueModule } from '../variant-attribute-value/variant-attribute-value.module';
+import { VariantAttributeValueModule } from '../attributes/variant-attribute-value/variant-attribute-value.module';
 
 @Module({
   imports: [

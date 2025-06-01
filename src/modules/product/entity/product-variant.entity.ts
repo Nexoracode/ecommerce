@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Product } from "./product.entity";
-import { VariantAttributeValue } from "src/modules/variant-attribute-value/entities/variant-attribute-value.entity";
+import { VariantAttributeValue } from "src/modules/attributes/variant-attribute-value/entities/variant-attribute-value.entity";
 @Entity()
 export class ProductVariant {
     @PrimaryGeneratedColumn()

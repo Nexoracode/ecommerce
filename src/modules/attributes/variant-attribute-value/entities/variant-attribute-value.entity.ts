@@ -1,7 +1,7 @@
-import { AttributeValue } from "src/modules/attribute-value/entities/attribute-value.entity";
-import { Attribute } from "src/modules/attribute/entities/attribute.entity";
 import { ProductVariant } from "src/modules/product/entity/product-variant.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Attribute } from "../../attribute/entities/attribute.entity";
+import { AttributeValue } from "../../attribute-value/entities/attribute-value.entity";
 
 @Entity()
 export class VariantAttributeValue {

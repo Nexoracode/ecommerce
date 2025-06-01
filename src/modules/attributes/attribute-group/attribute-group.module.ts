@@ -3,8 +3,8 @@ import { AttributeGroupService } from './attribute-group.service';
 import { AttributeGroupController } from './attribute-group.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AttributeGroup } from './entities/attribute-group.entity';
-import { CategoryModule } from '../category/category.module';
 import { AttributeService } from '../attribute/attribute.service';
+import { CategoryModule } from 'src/modules/category/category.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([AttributeGroup]), CategoryModule],
