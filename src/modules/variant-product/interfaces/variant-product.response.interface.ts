@@ -1,5 +1,3 @@
-// variant-product-response.interface.ts
-
 export interface IVariantProductResponse {
     id: number;
     sku: string;

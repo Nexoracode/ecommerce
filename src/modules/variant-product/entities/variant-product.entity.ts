@@ -1,8 +1,9 @@
-import { Column, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Product } from "src/modules/product/entities/product.entity";
 import { VariantAttributeValue } from "src/modules/attributes/variant-attribute-value/entities/variant-attribute-value.entity";
 import { IVariantProduct } from "../interfaces/variant-product.interface";
 
+@Entity('variants-product')
 export class VariantProduct implements IVariantProduct {
     @PrimaryGeneratedColumn()
     id: number;

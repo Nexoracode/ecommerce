@@ -1,6 +1,6 @@
 import { CreateVariantProductDto } from "../dto/create-variant-product.dto";
 import { UpdateVariantProductDto } from "../dto/update-variant-product.dto";
-import { IVariantProductGroupedResponse, IVariantProductResponse } from "./variant-product.interface";
+import { IVariantProductGroupedResponse } from "./variant-product.response.interface";
 
 export interface IVariantProductService {
     create(data: CreateVariantProductDto): Promise<IVariantProductGroupedResponse>;

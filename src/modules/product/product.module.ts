@@ -18,6 +18,7 @@ import { VariantAttributeValueModule } from '../attributes/variant-attribute-val
     ]),
   ],
   providers: [ProductService, ProductVariantService],
-  controllers: [ProductController]
+  controllers: [ProductController],
+  exports: [ProductService],
 })
 export class ProductModule { }
