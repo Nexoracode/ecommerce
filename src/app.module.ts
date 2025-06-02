@@ -14,6 +14,7 @@ import { AttributeModule } from './modules/attributes/attribute/attribute.module
 import { AttributeValueModule } from './modules/attributes/attribute-value/attribute-value.module';
 import { AttributeGroupModule } from './modules/attributes/attribute-group/attribute-group.module';
 import { VariantAttributeValueModule } from './modules/attributes/variant-attribute-value/variant-attribute-value.module';
+import { VariantProductModule } from './modules/variant-product/variant-product.module';
 
 
 @Module({
@@ -31,6 +32,7 @@ import { VariantAttributeValueModule } from './modules/attributes/variant-attrib
     AttributeValueModule,
     AttributeGroupModule,
     VariantAttributeValueModule,
+    VariantProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],
