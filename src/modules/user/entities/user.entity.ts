@@ -1,50 +1,61 @@
 import { Role } from "src/common/enums/role.enum";
 import { Address } from "src/modules/address/entities/address.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import * as bcrypt from 'bcrypt';
+import { IUser } from "../interfaces/user.interface";
 
-
-@Entity()
-export class User {
+@Entity('users')
+export class User implements IUser {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ name: 'first_name', type: 'varchar', length: 100, nullable: true })
+    @Column({ type: 'varchar', length: 100, nullable: true })
     firstName: string;
 
-    @Column({ name: 'last_name', type: 'varchar', length: 100, nullable: true })
+    @Column({ type: 'varchar', length: 100, nullable: true })
     lastName: string;
 
-    @Column({ name: 'phone', type: 'varchar', length: 11, unique: true, nullable: true })
+    @Column({ type: 'varchar', length: 11, unique: true, nullable: true })
     phone: string;
 
-    @Column({ name: 'is_phone_verified', default: false })
+    @Column({ default: false })
     isPhoneVerified: boolean;
 
-    @Column({ name: 'email', type: 'varchar', length: 100, nullable: true, unique: true })
+    @Column({ type: 'varchar', length: 100, nullable: true, unique: true })
     email: string;
 
-    @Column({ name: 'password', type: 'varchar', length: 100, nullable: true, select: false })
+    @Column({ type: 'varchar', length: 100, nullable: true, select: false })
     password: string;
+    @BeforeInsert()
+    @BeforeUpdate()
+    async hashedPassword() {
+        if (this.password) {
+            this.password = await bcrypt.hash(this.password, 10);
+        }
+    }
 
-    @Column({ name: 'role', type: 'enum', enum: Role, default: Role.USER, select: false })
+    @Column({ type: 'enum', enum: Role, default: Role.USER, select: false })
     role: Role;
 
-    @Column({ name: 'api_token', type: 'varchar', nullable: true, select: false })
+    @Column({ type: 'varchar', nullable: true, select: false })
     apiToken: string;
+
+    @Column({ default: true })
+    isActive: boolean;
+
+    @CreateDateColumn()
+    lastLoginAt: Date;
+
+    @Column({ nullable: true })
+    avatarUrl?: string;
 
     @OneToMany(() => Address, (address) => address.user, { cascade: true })
     addresses: Address[];
 
-    // @OneToMany(() => Order, (order) => order.user, { cascade : true })
-    // orders : Order[];
-
-    // @OneToMany(() => Cart, (cart) => cart.user, { cascade : true })
-    // cart : Cart[];
-
-    @CreateDateColumn({ name: 'created_at' })
+    @CreateDateColumn()
     createdAt: Date;
 
-    @UpdateDateColumn({ name: 'updated_at' })
+    @UpdateDateColumn()
     updatedAt: Date;
 
 }
