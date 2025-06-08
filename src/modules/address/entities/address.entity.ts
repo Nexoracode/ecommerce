@@ -1,8 +1,9 @@
 import { User } from "src/modules/user/entities/user.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { IAddress } from "../interfaces/address.interface";
 
-@Entity()
-export class Address {
+@Entity('addresses')
+export class Address implements IAddress {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -10,10 +11,10 @@ export class Address {
     city: string;
 
     @Column()
-    state: string;
+    province: string;
 
     @Column()
-    address: string;
+    addressLine: string;
 
     @Column({ name: 'postal_code' })
     postalCode: string;
@@ -24,4 +25,10 @@ export class Address {
     @ManyToOne(() => User, (user) => user.addresses, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })
     user: User;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
 }
