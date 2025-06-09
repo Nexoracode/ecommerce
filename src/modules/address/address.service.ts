@@ -8,6 +8,8 @@ import { Address } from './entities/address.entity';
 import { Repository } from 'typeorm';
 import { AddressMapper } from './mappers/address.mapper';
 import { User } from '../user/entities/user.entity';
+import { Request } from 'express';
+import { CustomRequest } from 'src/common/interfaces/request.interface';
 
 @Injectable()
 export class AddressService implements IAddressService {
@@ -17,6 +19,7 @@ export class AddressService implements IAddressService {
         @InjectRepository(User)
         private readonly userRepo: Repository<User>
     ) { }
+
     async create(data: CreateAddressDto): Promise<IAddressResponse> {
         const user = await this.userRepo.findOne({ where: { id: data.userId } })
         if (!user) throw new NotFoundException('user not found');
@@ -35,6 +38,17 @@ export class AddressService implements IAddressService {
         });
         const saved = await this.addressRepo.save(address);
         return AddressMapper.toResponse(saved);
+    }
+
+    async findMe(req: CustomRequest): Promise<IAddressResponse> {
+        const address = await this.addressRepo.findOne({
+            where: {
+                user: { id: req.user.sub },
+                isPrimary: true,
+            },
+            relations: ['user']
+        })
+        return AddressMapper.toResponse(address!);
     }
 
     async update(id: number, data: UpdateAddressDto): Promise<IAddressResponse> {
@@ -77,4 +91,5 @@ export class AddressService implements IAddressService {
         })
         return address.map((a) => AddressMapper.toResponse(a))
     }
+
 }
