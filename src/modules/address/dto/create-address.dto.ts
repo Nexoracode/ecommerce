@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, Length } from "class-validator";
 
 export class CreateAddressDto {
     @IsNotEmpty()
@@ -15,6 +15,7 @@ export class CreateAddressDto {
 
     @IsOptional()
     @IsString()
+    @Length(10, 10)
     postalCode: string;
 
     @IsOptional()

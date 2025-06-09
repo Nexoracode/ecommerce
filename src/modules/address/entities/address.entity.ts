@@ -16,10 +16,10 @@ export class Address implements IAddress {
     @Column()
     addressLine: string;
 
-    @Column({ name: 'postal_code' })
+    @Column({ unique: true })
     postalCode: string;
 
-    @Column({ name: 'is_primary', default: false })
+    @Column({ name: 'is_primary', default: true })
     isPrimary: boolean;
 
     @ManyToOne(() => User, (user) => user.addresses, { onDelete: 'CASCADE' })

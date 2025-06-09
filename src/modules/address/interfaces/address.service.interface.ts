@@ -6,6 +6,5 @@ export interface IAddressService {
     create(data: CreateAddressDto): Promise<IAddressResponse>;
     update(id: number, data: UpdateAddressDto): Promise<IAddressResponse>;
     remove(id: number): Promise<string>;
-    findByUserId(userId: number): Promise<IAddressResponse>;
-    findOne(id: number): Promise<IAddressResponse>;
+    findByUserId(userId: number): Promise<IAddressResponse[]>;
 }
