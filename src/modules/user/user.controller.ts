@@ -9,14 +9,20 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { OwnerGuard } from 'src/common/guard/owner.guard';
+import { AddressService } from '../address/address.service';
+import { CustomRequest } from 'src/common/interfaces/request.interface';
+import { CreateAddressDto } from '../address/dto/create-address.dto';
+import { UpdateAddressDto } from '../address/dto/update-address.dto';
 @ApiTags('Users')
 @Controller('users')
 @UseGuards(AccessGuard, RoleGuard)
 export class UserController {
     constructor(
-        private readonly userService: UserService
+        private readonly userService: UserService,
+        private readonly addressService: AddressService,
     ) { }
 
+    //user controller
     @Get()
     @HttpCode(200)
     findAllUI() {
@@ -66,4 +72,36 @@ export class UserController {
     delete(@Param('id', ParseIntPipe) id: number) {
         return this.userService.remove(id);
     }
+
+    //addresses controller
+    @UseGuards(AccessGuard)
+    @Get('me/addresses')
+    findMeAddress(@Req() req: CustomRequest) {
+        return this.addressService.findByUserId(req.user.sub);
+    }
+
+    @UseGuards(AccessGuard)
+    @Post('me/addresses')
+    createAddressForUser(@Req() req: CustomRequest, @Body() data: CreateAddressDto) {
+        return this.addressService.create(req.user.sub, data);
+    }
+
+    @Roles(Role.ADMIN)
+    @Post(':id/addresses')
+    createAddressForAdmin(@Param('id', ParseIntPipe) id: number, @Body() data: CreateAddressDto) {
+        return this.addressService.create(id, data);
+    }
+
+    @UseGuards(AccessGuard)
+    @Patch('me/addresses/:addressId')
+    updateUserAddress(@Param('addressId', ParseIntPipe) addressId: number, @Body() data: UpdateAddressDto) {
+        return this.addressService.update(addressId, data);
+    }
+
+    @UseGuards(AccessGuard)
+    @Delete('me/addresses/:addressId')
+    deleteUserAddress(@Param('addressId', ParseIntPipe) addressId: number) {
+        return this.addressService.remove(addressId);
+    }
+
 }

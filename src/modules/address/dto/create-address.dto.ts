@@ -20,9 +20,5 @@ export class CreateAddressDto {
 
     @IsOptional()
     @IsBoolean()
-    isPrimary: boolean;
-
-    @IsNumber()
-    @IsNotEmpty()
-    userId: number;
+    isPrimary: boolean | false;
 }

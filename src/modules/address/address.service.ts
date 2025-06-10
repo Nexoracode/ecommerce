@@ -20,8 +20,8 @@ export class AddressService implements IAddressService {
         private readonly userRepo: Repository<User>
     ) { }
 
-    async create(data: CreateAddressDto): Promise<IAddressResponse> {
-        const user = await this.userRepo.findOne({ where: { id: data.userId } })
+    async create(userId: number, data: CreateAddressDto): Promise<IAddressResponse> {
+        const user = await this.userRepo.findOne({ where: { id: userId } })
         if (!user) throw new NotFoundException('user not found');
         const exists = await this.addressRepo.findOne({
             where: { postalCode: data.postalCode },
@@ -40,15 +40,18 @@ export class AddressService implements IAddressService {
         return AddressMapper.toResponse(saved);
     }
 
-    async findMe(req: CustomRequest): Promise<IAddressResponse> {
+    async findMe(userId: number): Promise<IAddressResponse> {
         const address = await this.addressRepo.findOne({
             where: {
-                user: { id: req.user.sub },
+                user: { id: userId },
                 isPrimary: true,
             },
             relations: ['user']
         })
-        return AddressMapper.toResponse(address!);
+        if (!address) {
+            throw new NotFoundException('address not found');
+        }
+        return AddressMapper.toResponse(address);
     }
 
     async update(id: number, data: UpdateAddressDto): Promise<IAddressResponse> {
