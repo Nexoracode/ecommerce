@@ -39,6 +39,13 @@ export class User implements IUser {
 
     @Column({ type: 'varchar', nullable: true, select: false })
     apiToken: string;
+    @BeforeInsert()
+    @BeforeUpdate()
+    async hashedApi() {
+        if (this.apiToken) {
+            this.apiToken = await bcrypt.hash(this.apiToken, 10);
+        }
+    }
 
     @Column({ default: true })
     isActive: boolean;

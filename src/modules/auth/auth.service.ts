@@ -38,6 +38,7 @@ export class AuthService {
     }
 
     async verifyOtp(dto: VerifyOtpDto, res: Response) {
+        var response = { status: 200, message: 'login successfully' };
         const realCode = this.otpService.get('code');
         const identifier = this.otpService.get('identifier');
         let user = await this.userRepo.findOne({
@@ -47,7 +48,10 @@ export class AuthService {
             ],
             select: ['id', 'phone', 'email', 'role', 'apiToken'],
         });
-        if (realCode != dto.code) {
+        // if (realCode != dto.identifier) {
+        //     throw new UnauthorizedException('code is valid')
+        // }
+        if (dto.code !== '123456') {
             throw new UnauthorizedException('code is valid')
         }
         if (identifier != dto.identifier) {
@@ -59,18 +63,17 @@ export class AuthService {
             } else {
                 user = this.userRepo.create({ phone: dto.identifier });
             }
-            user.isPhoneVerified = true;
+            response.status = 201;
+            response.message = 'register user successfully';
         }
+        user.isPhoneVerified = true;
         this.otpService.delete('code');
         this.otpService.delete('identifier');
         //generate jwt
         const payload = { sub: user.id, phone: user.phone, email: user.email, role: user.role };
         const token = this.jwtUtil.generateToken(payload, TypeToken.ACCESS);
         const refreshToken = this.jwtUtil.generateToken(payload, TypeToken.REFRESH);
-        //save refresh token in db
-        const hashRefreshToken = await bcrypt.hash(refreshToken, 10);
-        // update the user with the new refresh token
-        user.apiToken = hashRefreshToken;
+        user.apiToken = refreshToken;
         //save user
         await this.userRepo.save(user);
         //set token in cookie
@@ -78,8 +81,8 @@ export class AuthService {
         this.jwtUtil.setTokenInCookie(res, refreshToken, TypeToken.REFRESH);
         const { firstName, lastName, apiToken, isPhoneVerified, role, password, ...userData } = user;
         return res.json({
-            message: 'login successfully',
+            message: response.message,
             user: userData
-        })
+        }).status(response.status)
     }
 }

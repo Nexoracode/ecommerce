@@ -52,7 +52,7 @@ export class UserController {
     @Roles(Role.ADMIN)
     @Post()
     @HttpCode(201)
-    @ApiBody({ type: CreateUserDto })
+    @ApiBody({ type: [CreateUserDto] })
     @ApiResponse({ status: 201, description: 'User created successfully' })
     @ApiResponse({ status: 400, description: 'phone/email already exists' })
     create(@Body() data: CreateUserDto) {
