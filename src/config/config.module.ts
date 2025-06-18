@@ -10,7 +10,6 @@ import { APP_GUARD, Reflector } from '@nestjs/core';
 import { JwtUtil } from 'src/common/utils/jwt.util';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { AutoRefreshGuard } from 'src/common/guard/auto-refresh';
-import { GalleryService } from 'src/modules/gallery/gallery.service';
 
 @Module({
     imports: [
@@ -30,11 +29,11 @@ import { GalleryService } from 'src/modules/gallery/gallery.service';
         })
     ],
     providers: [
-        {
-            provide: APP_GUARD,
-            useFactory: (configService: JwtUtil, authService: AuthService, reflector: Reflector) => new AutoRefreshGuard(configService, authService, reflector),
-            inject: [JwtUtil, AuthService, Reflector],
-        },
+        // {
+        //     provide: APP_GUARD,
+        //     useFactory: (configService: JwtUtil, authService: AuthService, reflector: Reflector) => new AutoRefreshGuard(configService, authService, reflector),
+        //     inject: [JwtUtil, AuthService, Reflector],
+        // },
         JwtUtil,
         ConfigService,
         AccessStrategy,

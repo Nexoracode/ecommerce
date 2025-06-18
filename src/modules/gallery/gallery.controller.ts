@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { GalleryService } from './gallery.service';
 import { CreateGalleryDto } from './dto/create-gallery.dto';
 import { IGalleryResponse } from './interfaces/gallery.interface';
@@ -30,7 +30,7 @@ export class GalleryController {
     }
 
     @Post('upload')
-    @UseInterceptors(FileInterceptor('image'))
+    @UseInterceptors(FilesInterceptor('image'))
     uploadImage(@UploadedFile() file: Express.Multer.File, @Body() data: CreateGalleryDto):
         Promise<IGalleryResponse> {
         return this.galleryService.uploadImage(file, data);
