@@ -2,11 +2,12 @@ import { User } from "src/modules/user/entities/user.entity";
 
 export interface IAddress {
     id: number;
+    name: string;
     city: string;
     province: string;
     addressLine: string;
     postalCode: string;
-    isPrimary: boolean;
+    isPublic: boolean;
     user: User,
     createdAt: Date;
     updatedAt: Date;

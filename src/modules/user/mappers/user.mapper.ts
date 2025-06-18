@@ -1,28 +1,25 @@
 import { User } from "../entities/user.entity";
-import { IUserCMSResponse, IUserUIResponse } from "../interfaces/user.response.interface";
+import { IUserResponse } from "../interfaces/user.response.interface";
 
 export class UserMapper {
-    static toCMSResponse(user: User): IUserCMSResponse {
+    static toCMSResponse(user: User): IUserResponse {
         return {
             id: user.id,
             firstName: user.firstName,
             lastName: user.lastName,
             phone: user.phone,
-            email: user.email,
-            isPhoneVerified: user.isPhoneVerified,
-            isActive: user.isActive,
+            email: user.email!,
+            verificationStatus: user.verificationStatus,
             role: user.role,
-            createdAt: user.createdAt,
-            updatedAt: user.updatedAt,
-        }
-    }
-
-    static toUIResponse(user: User): IUserUIResponse {
-        return {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            avatarUrl: user.avatarUrl,
+            birthday: user.birthday,
+            accessibility: user.accessibility,
+            hashedUserId: user.hashedUserId,
+            hasPassword: user.hasPassword,
+            isActive: user.isActive,
+            isWalletRefund: user.isWalletRefund,
+            nationalIdentityNumber: user.nationalIdentityNumber!,
+            avatarUrl: user.avatarUrl!,
+            job: user.job!,
         }
     }
 }

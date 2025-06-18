@@ -5,11 +5,12 @@ export class AddressMapper {
     static toResponse(address: Address): IAddressResponse {
         return {
             id: address.id,
+            name: address.name,
             city: address.city,
             province: address.province,
             addressLine: address.addressLine,
             postalCode: address.postalCode,
-            isPrimary: address.isPrimary,
+            isPublic: address.isPublic,
             user: address.user,
         }
     }

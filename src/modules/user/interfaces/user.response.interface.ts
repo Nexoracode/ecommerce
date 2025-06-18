@@ -1,29 +1,23 @@
 import { Role } from "src/common/enums/role.enum";
-
-export interface IUserCMSResponse {
-    id: number;
-    firstName: string;
-    lastName: string;
-    phone: string;
-    isPhoneVerified: boolean;
-    email: string;
-    role?: Role;
-    isActive: boolean;
-    avatarUrl?: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-export interface IUserUIResponse {
-    id: number;
-    firstName: string;
-    lastName: string;
-    avatarUrl?: string;
-}
+import { VerificationStatus } from "src/common/enums/verification-status.enum";
+import { Birthday } from "../embedded/birthday.embedded";
+import { Accessibility } from "../embedded/accessibility.embedded";
 
 export interface IUserResponse {
     id: number;
+    avatarUrl?: string;
+    birthday: Birthday;
+    accessibility: Accessibility;
+    email: string;
+    phone: string;
+    isActive: boolean;
+    role: Role;
     firstName: string;
     lastName: string;
-    avatarUrl: string;
+    hasPassword: boolean;
+    hashedUserId: string;
+    isWalletRefund: boolean;
+    job?: string;
+    nationalIdentityNumber: string;
+    verificationStatus: VerificationStatus;
 }
