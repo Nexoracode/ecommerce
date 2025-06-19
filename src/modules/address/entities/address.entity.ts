@@ -8,9 +8,6 @@ export class Address implements IAddress {
     id: number;
 
     @Column()
-    name: string;
-
-    @Column()
     city: string;
 
     @Column()
@@ -22,8 +19,8 @@ export class Address implements IAddress {
     @Column({ unique: true })
     postalCode: string;
 
-    @Column({ name: 'is_public', default: true })
-    isPublic: boolean;
+    @Column({ name: 'is_primary', default: true })
+    isPrimary: boolean;
 
     @ManyToOne(() => User, (user) => user.addresses, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })

@@ -1,32 +1,6 @@
 import { Role } from "src/common/enums/role.enum";
-import { IsArray, IsBoolean, IsEmail, IsNumber, IsOptional, IsString, Length, Matches, ValidateNested } from "class-validator";
+import { IsArray, IsBoolean, IsEmail, IsOptional, IsString, Length, Matches } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { Birthday } from "../embedded/birthday.embedded";
-import { Type } from "class-transformer";
-
-export class birthdayDto {
-
-    @IsNumber()
-    birthDay: number;
-
-    @IsNumber()
-    birthMonth: number;
-
-    @IsNumber()
-    birthYear: number;
-}
-
-export class AccessibilityDto {
-
-    @IsBoolean()
-    hasPhysicalLimitations: boolean;
-
-    @IsBoolean()
-    isBlind: boolean;
-
-    @IsBoolean()
-    isDeaf: boolean;
-}
 
 export class CreateUserDto {
 
@@ -46,6 +20,11 @@ export class CreateUserDto {
     @Matches(/^09\d{9}$/, { message: 'Phone number must be a valid Iranian mobile number' })
     @IsOptional()
     phone: string;
+
+    @ApiProperty()
+    @IsBoolean()
+    @IsOptional()
+    isPhoneVerified: boolean;
 
     @ApiProperty()
     @IsEmail()
@@ -72,22 +51,7 @@ export class CreateUserDto {
     avatarUrl: string;
 
     @ApiProperty()
-    @IsString()
+    @IsArray()
     @IsOptional()
-    job?: string;
-
-    @ApiProperty()
-    @IsString()
-    @IsOptional()
-    nationalIdentityNumber?: string;
-
-    @ApiProperty()
-    @ValidateNested()
-    @Type(() => birthdayDto)
-    birthday: birthdayDto
-
-    @ApiProperty()
-    @ValidateNested()
-    @Type(() => AccessibilityDto)
-    accessibility: AccessibilityDto;
+    addresses: number[];
 }

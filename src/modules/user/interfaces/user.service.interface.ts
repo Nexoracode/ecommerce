@@ -1,5 +1,13 @@
-import { CustomRequest } from "src/common/interfaces/request.interface";
 import { CreateUserDto } from "../dto/create-user.dto";
-import { IUserResponse } from "./user.response.interface";
-import { UpdateNameNationalCodeUserDto } from "../dto/update-name-national-code.dto";
-import { UpdatePhoneDto } from "../dto/update-phone.dto";
+import { UpdateUserDto } from "../dto/update-user.dto";
+import { IUserCMSResponse, IUserUIResponse } from "./user.response.interface";
+
+export interface IUserService {
+    create(data: CreateUserDto): Promise<IUserCMSResponse>;
+    findOneCMS(id: number): Promise<IUserCMSResponse>;
+    findOneUI(id: number): Promise<IUserUIResponse>
+    findAllCMS(): Promise<IUserCMSResponse[]>;
+    findAllUI(): Promise<IUserUIResponse[]>
+    update(id: number, data: UpdateUserDto): Promise<IUserCMSResponse>;
+    remove(id: number): Promise<string>;
+}

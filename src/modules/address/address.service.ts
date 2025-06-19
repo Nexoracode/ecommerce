@@ -30,7 +30,7 @@ export class AddressService implements IAddressService {
         if (exists) throw new BadRequestException('postal code already exists');
         await this.addressRepo.update(
             { user: { id: user.id } },
-            { isPublic: false }
+            { isPrimary: false }
         )
         const address = this.addressRepo.create({
             ...data,
@@ -44,7 +44,7 @@ export class AddressService implements IAddressService {
         const address = await this.addressRepo.findOne({
             where: {
                 user: { id: userId },
-                isPublic: true,
+                isPrimary: true,
             },
             relations: ['user']
         })
@@ -62,10 +62,10 @@ export class AddressService implements IAddressService {
         if (!address) {
             throw new NotFoundException('address not found');
         }
-        if (data.isPublic === true) {
+        if (data.isPrimary === true) {
             await this.addressRepo.update(
                 { user: { id: address.user.id } },
-                { isPublic: false }
+                { isPrimary: false }
             )
         }
         const updated = this.addressRepo.merge(address, data);

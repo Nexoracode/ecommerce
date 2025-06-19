@@ -1,9 +1,11 @@
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsPhoneNumber, Validate } from "class-validator";
+import { IsEmailOrMobileConstraint } from "./validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class RequestDto {
 
-    @ApiProperty()
+    @ApiProperty({ description: 'email or phone' })
     @IsNotEmpty()
-    phone: string;
+    @Validate(IsEmailOrMobileConstraint)
+    identifier: string;
 }
