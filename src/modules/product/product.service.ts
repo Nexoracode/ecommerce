@@ -47,4 +47,34 @@ export class ProductService {
         product.category = category
         return await this.productRepo.save(product);
     }
+
+    // async findVariantByProduct(productId: number) {
+    //       await this.pService.findProductById(productId);
+    //       const variants = await this.pvRepo.find({
+    //           where: { product: { id: productId } },
+    //           relations: ['attributes', 'attributes.attribute', 'attributes.attribute.group', 'attributes.value']
+    //       });
+    //       return variants.map(variant => {
+    //           const grouped = {};
+    //           for (const attr of variant.attributes) {
+    //               const groupName = attr.attribute.group?.name || 'مشخصات کلی';
+    //               if (!grouped[groupName]) grouped[groupName] = [];
+    //               grouped[groupName].push({
+    //                   attribute: attr.attribute.name,
+    //                   value: attr.value.value,
+    //               })
+    //           }
+
+    //           return {
+    //               id: variant.id,
+    //               sku: variant.sku,
+    //               price: variant.price,
+    //               stock: variant.stock,
+    //               groups: Object.entries(grouped).map(([group, items]) => ({
+    //                   group,
+    //                   items,
+    //               }))
+    //           }
+    //       });
+    //   }
 }

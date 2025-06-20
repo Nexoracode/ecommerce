@@ -1,6 +1,6 @@
 import { Category } from "src/modules/category/entities/category.entity";
+import { VariantProduct } from "src/modules/variant-product/entities/variant-product.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { ProductVariant } from "./product-variant.entity";
 
 @Entity()
 export class Product {
@@ -17,8 +17,8 @@ export class Product {
     @JoinColumn({ name: 'category_id' })
     category: Category;
 
-    @OneToMany(() => ProductVariant, variant => variant.product, { cascade: true })
-    variants: ProductVariant[];
+    @OneToMany(() => VariantProduct, variant => variant.product, { cascade: true })
+    variants: VariantProduct[];
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
