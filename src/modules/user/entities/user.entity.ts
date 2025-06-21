@@ -3,6 +3,7 @@ import { Address } from "src/modules/address/entities/address.entity";
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import * as bcrypt from 'bcrypt';
 import { IUser } from "../interfaces/user.interface";
+import { Media } from "src/modules/upload/entities/image.entity";
 
 @Entity('users')
 export class User implements IUser {
@@ -58,6 +59,9 @@ export class User implements IUser {
 
     @OneToMany(() => Address, (address) => address.user, { cascade: true })
     addresses: Address[];
+
+    @OneToMany(() => Media, (media) => media.product)
+    media: Media[];
 
     @CreateDateColumn()
     createdAt: Date;

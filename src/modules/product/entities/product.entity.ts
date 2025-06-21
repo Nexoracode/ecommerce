@@ -1,4 +1,5 @@
 import { Category } from "src/modules/category/entities/category.entity";
+import { Media } from "src/modules/upload/entities/image.entity";
 import { VariantProduct } from "src/modules/variant-product/entities/variant-product.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -19,6 +20,9 @@ export class Product {
 
     @OneToMany(() => VariantProduct, variant => variant.product, { cascade: true })
     variants: VariantProduct[];
+
+    @OneToMany(() => Media, (media) => media.product)
+    media: Media[];
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;

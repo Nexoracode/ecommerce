@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as ftp from 'basic-ftp';
 import { Readable } from 'typeorm/platform/PlatformTools';
+import { CreateMediaDto } from './dto/upload-file.dto';
 @Injectable()
 export class UploadService {
     private client: ftp.Client;
@@ -49,7 +50,7 @@ export class UploadService {
         }
 
         return {
-            message: 'آپلود تصاویر با موفقیت انجام شد',
+            message: 'آپلود فایل با موفقیت انجام شد',
             data: uploadedUrls.length === 1 ? uploadedUrls[0] : uploadedUrls,
         }
     }
