@@ -15,7 +15,7 @@ export class AttributeGroupService {
   ) { }
 
   async create(dto: CreateAttributeGroupDto) {
-    const category = await this.categoryService.findOneBy(dto.categoryId);
+    const category = await this.categoryService.findOne(dto.categoryId);
     let group = await this.repo.findOneBy({ name: dto.name });
     if (group) {
       throw new Error(`Attribute group with name ${dto.name} already exists.`);

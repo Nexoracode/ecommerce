@@ -5,8 +5,7 @@ import { AppConfigModule } from './config/config.module';
 import { UserModule } from './modules/user/user.module';
 import { AddressModule } from './modules/address/address.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { GalleryModule } from './modules/gallery/gallery.module';
-import { FtpModule } from './common/ftp/service.module';
+import { UploadModule } from './modules/upload/upload.module';
 import { CategoryModule } from './modules/category/category.module';
 import { ProductModule } from './modules/product/product.module';
 import { CategoryAttributeModule } from './modules/category-attribute/category-attribute.module';
@@ -20,11 +19,10 @@ import { VariantProductModule } from './modules/variant-product/variant-product.
 @Module({
   imports: [
     AppConfigModule,
-    GalleryModule,
     UserModule,
     AddressModule,
     AuthModule,
-    FtpModule,
+    UploadModule,
     CategoryModule,
     ProductModule,
     CategoryAttributeModule,

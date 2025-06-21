@@ -30,22 +30,22 @@ export class ProductService {
     }
 
     async createProduct(createDto: CreateProductDto) {
-        const category = await this.categoryService.findByIdWithDescendants(createDto.categoryId);
-        const product = this.productRepo.create({
-            title: createDto.title,
-            description: createDto.description,
-            category,
-        })
-        return await this.productRepo.save(product);
+        // const category = await this.categoryService.findByIdWithDescendants(createDto.categoryId);
+        // const product = this.productRepo.create({
+        //     title: createDto.title,
+        //     description: createDto.description,
+        //     category,
+        // })
+        // return await this.productRepo.save(product);
     }
 
     async updateProduct(updateDto: UpdateProductDto, id: number) {
-        const category = await this.categoryService.findByIdWithDescendants(updateDto.categoryId);
-        const product = await this.findProductById(id);
-        product.title = updateDto.title;
-        product.description = updateDto.description!;
-        product.category = category
-        return await this.productRepo.save(product);
+        // const category = await this.categoryService.findByIdWithDescendants(updateDto.categoryId);
+        // const product = await this.findProductById(id);
+        // product.title = updateDto.title;
+        // product.description = updateDto.description!;
+        // product.category = category
+        // return await this.productRepo.save(product);
     }
 
     // async findVariantByProduct(productId: number) {
